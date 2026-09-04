@@ -25,7 +25,7 @@ const HeroSection = ({ onExploreClick }) => {
       
       {/* 3D/Lidar particle background - disabled on low-end devices */}
       {!isLowEnd && (
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.6, pointerEvents: 'none' }}>
+        <div className="hero-particles-container" style={{ position: 'absolute', inset: 0, opacity: 0.6, pointerEvents: 'none' }}>
            <div className="bg-grid-pattern" style={{ width: '100%', height: '100%', position: 'absolute' }} />
            {Array.from({ length: 30 }).map((_, i) => (
              <motion.div

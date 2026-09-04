@@ -45,6 +45,16 @@ function App() {
     };
   }, [isLowEnd]);
 
+  // Handle body overlay-active class
+  useEffect(() => {
+    const isOverlayActive = isMenuOpen || activeModal !== null;
+    if (isOverlayActive) {
+      document.body.classList.add('overlay-active');
+    } else {
+      document.body.classList.remove('overlay-active');
+    }
+  }, [isMenuOpen, activeModal]);
+
   const handleMenuSelect = (sectionId) => {
     setIsMenuOpen(false);
     if (sectionId === 'home') {
