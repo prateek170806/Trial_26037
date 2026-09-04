@@ -55,18 +55,26 @@ const HeroSection = ({ onExploreClick }) => {
       )}
 
       {/* Main Content */}
-      <div className="container hero-content" style={{ position: 'relative', zIndex: 10, maxWidth: '1400px', margin: '0 auto' }}>
+      <div className="container hero-content" style={{ position: 'relative', zIndex: 'var(--z-panels)', marginInline: 'auto' }}>
         <div style={{ maxWidth: '800px', width: '100%' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div style={{ display: 'inline-block', padding: '0.25rem 0.75rem', border: '1px solid var(--color-primary)', borderRadius: '20px', color: 'var(--color-primary)', fontSize: '0.8rem', marginBottom: '1.5rem', letterSpacing: '0.05em' }}>
+            <div className="text-caption" style={{ 
+              display: 'inline-block', 
+              paddingBlock: 'var(--space-1)', 
+              paddingInline: 'var(--space-2)', 
+              border: '1px solid var(--color-primary)', 
+              borderRadius: '20px', 
+              color: 'var(--color-primary)', 
+              marginBlockEnd: 'var(--space-3)' 
+            }}>
               SIH 2026 - AUTONOMOUS DRIVING
             </div>
             
-            <h1 className="title-fluid glitch-effect" style={{ marginBottom: '1rem', fontWeight: 700, lineHeight: 1.1 }}>
+            <h1 className="text-display glitch-effect" style={{ marginBlockEnd: 'var(--space-2)' }}>
               <span className="text-gradient">{typedText}</span>
               <motion.span 
                 animate={{ opacity: [1, 0] }}
@@ -76,32 +84,33 @@ const HeroSection = ({ onExploreClick }) => {
             </h1>
             
             <motion.p 
-              className="tagline-fluid"
+              className="text-h2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 0.8 }}
-              style={{ color: 'var(--color-text-muted)', marginBottom: '2.5rem', maxWidth: '600px', margin: '0 auto 2.5rem auto' }}
+              transition={{ delay: 1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              style={{ color: 'var(--color-text-muted)', marginBlockEnd: 'var(--space-4)', maxWidth: '600px', marginInline: 'auto' }}
             >
               Adaptive Path Planning & Collision Avoidance for Autonomous Vehicles on Unstructured Indian Roads.
             </motion.p>
             
-            <div className="flex-center" style={{ gap: '1rem', flexWrap: 'wrap' }}>
-              <Button icon={ArrowRight} onClick={onExploreClick} className="touch-target">Explore System</Button>
+            <div className="flex-center" style={{ gap: 'var(--space-2)', flexWrap: 'wrap' }}>
+              <Button icon={ArrowRight} onClick={onExploreClick} variant="primary" ariaLabel="Explore NavDrishti System">Explore System</Button>
             </div>
           </motion.div>
         </div>
 
         {/* Floating HUD Metrics */}
         <motion.div 
-          className="hero-metrics-container"
+          className="hero-metrics-container surface-level-3"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
+          transition={{ delay: 1.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          style={{ padding: 'var(--space-3)' }}
         >
-          <Metric label="Replanning Latency" value="12ms" trend="-2ms" status="good" />
-          <Metric label="Collision Risk" value="0.04%" trend="-0.01%" status="good" />
-          <Metric label="Agents Tracked" value="128" icon={Crosshair} />
-          <Metric label="Path Smoothness" value="98.5%" status="good" />
+          <Metric label="Replanning Latency" value="12" unit="ms" trend="-2" status="good" />
+          <Metric label="Collision Risk" value="0.04" unit="%" trend="-0.01" status="good" />
+          <Metric label="Agents Tracked" value="128" />
+          <Metric label="Path Smoothness" value="98.5" unit="%" status="good" />
         </motion.div>
       </div>
     </section>

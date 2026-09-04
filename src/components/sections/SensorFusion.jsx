@@ -1,133 +1,114 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Camera, Radio, Scan } from 'lucide-react';
+import { motion } from 'framer-motion';
+import Button from '../ui/Button';
+import { Camera, Radio, Combine } from 'lucide-react';
 
 const SensorFusion = () => {
-  const [activeSensors, setActiveSensors] = useState({ camera: true, lidar: true, radar: true });
+  const [activeSensors, setActiveSensors] = useState({ lidar: true, camera: true, radar: true });
 
   const toggleSensor = (sensor) => {
     setActiveSensors(prev => ({ ...prev, [sensor]: !prev[sensor] }));
   };
 
   return (
-    <section className="section" style={{ background: '#05070d' }}>
+    <section className="section">
       <div className="container">
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <h2 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Sensor Fusion Deep Dive</h2>
-          <p style={{ color: 'var(--color-text-muted)' }}>Multi-modal perception ensuring robustness even when individual sensors fail.</p>
+        <div style={{ textAlign: 'center', marginBlockEnd: 'var(--space-8)' }}>
+          <h2 className="text-h1" style={{ marginBlockEnd: 'var(--space-2)' }}>Sensor Fusion Pipeline</h2>
+          <p className="text-body" style={{ color: 'var(--color-text-muted)' }}>Multi-modal perception ensuring robustness even when individual sensors fail.</p>
         </div>
 
         {/* 3-Panel Sensor View */}
-        <div className="grid-3-col" style={{ width: '100%', marginBottom: '2rem' }}>
+        <div className="grid-3-col" style={{ width: '100%', marginBlockEnd: 'var(--space-4)' }}>
           
           {/* Camera Panel */}
-          <div className="glass-panel" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: activeSensors.camera ? 1 : 0.5, transition: 'opacity 0.3s' }}>
-            <div style={{ padding: '1rem', borderBottom: 'var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Camera size={18} color="var(--color-primary)" />
-                <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>RGB Camera</span>
+          <div className="surface-level-1" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: activeSensors.camera ? 1 : 0.5, transition: 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+            <div style={{ padding: 'var(--space-3)', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                <Camera size={20} color="#ff5722" aria-hidden="true" />
+                <h3 className="text-h2" style={{ margin: 0 }}>Vision (RGB)</h3>
               </div>
-              <input type="checkbox" checked={activeSensors.camera} onChange={() => toggleSensor('camera')} style={{ cursor: 'pointer' }} />
+              <span className="text-caption" style={{ color: activeSensors.camera ? '#00e676' : 'var(--color-text-muted)' }}>
+                {activeSensors.camera ? 'ACTIVE' : 'OFFLINE'}
+              </span>
             </div>
-            <div style={{ height: '200px', background: '#111', position: 'relative', overflow: 'hidden' }}>
-              {/* Simulated camera feed with 2D bounding boxes */}
-              <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, #222, #000)', opacity: 0.8 }} />
-              {activeSensors.camera && (
-                <>
-                  <div style={{ position: 'absolute', top: '40%', left: '30%', width: '60px', height: '50px', border: '1px solid #00e676', background: 'rgba(0,230,118,0.1)' }}>
-                    <div style={{ position: 'absolute', top: '-15px', left: '-1px', background: '#00e676', color: '#000', fontSize: '10px', padding: '0 4px' }}>Auto 94%</div>
-                  </div>
-                  <div style={{ position: 'absolute', top: '50%', left: '60%', width: '20px', height: '40px', border: '1px solid var(--color-warning)', background: 'rgba(255,171,0,0.1)' }}>
-                    <div style={{ position: 'absolute', top: '-15px', left: '-1px', background: 'var(--color-warning)', color: '#000', fontSize: '10px', padding: '0 4px' }}>Ped 97%</div>
-                  </div>
-                </>
-              )}
+            <div style={{ height: '200px', background: '#05070d', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+               {/* Simulated Bounding Boxes */}
+               {activeSensors.camera && (
+                 <>
+                   <div style={{ position: 'absolute', top: '30%', left: '20%', width: '60px', height: '80px', border: '2px solid #ff5722', background: 'rgba(255, 87, 34, 0.1)' }}>
+                     <span className="text-caption" style={{ position: 'absolute', top: '-18px', left: 0, background: '#ff5722', color: 'white', padding: '0 4px', fontSize: '10px' }}>Pedestrian 98%</span>
+                   </div>
+                   <div style={{ position: 'absolute', top: '40%', right: '25%', width: '120px', height: '60px', border: '2px solid #ff5722', background: 'rgba(255, 87, 34, 0.1)' }}>
+                     <span className="text-caption" style={{ position: 'absolute', top: '-18px', left: 0, background: '#ff5722', color: 'white', padding: '0 4px', fontSize: '10px' }}>Vehicle 95%</span>
+                   </div>
+                 </>
+               )}
             </div>
           </div>
 
           {/* LiDAR Panel */}
-          <div className="glass-panel" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: activeSensors.lidar ? 1 : 0.5, transition: 'opacity 0.3s' }}>
-            <div style={{ padding: '1rem', borderBottom: 'var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Scan size={18} color="var(--color-primary)" />
-                <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>LiDAR 3D Point Cloud</span>
+          <div className="surface-level-1" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: activeSensors.lidar ? 1 : 0.5, transition: 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+            <div style={{ padding: 'var(--space-3)', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                <Combine size={20} color="var(--color-primary)" aria-hidden="true" />
+                <h3 className="text-h2" style={{ margin: 0 }}>LiDAR (3D Pointcloud)</h3>
               </div>
-              <input type="checkbox" checked={activeSensors.lidar} onChange={() => toggleSensor('lidar')} style={{ cursor: 'pointer' }} />
+              <span className="text-caption" style={{ color: activeSensors.lidar ? '#00e676' : 'var(--color-text-muted)' }}>
+                {activeSensors.lidar ? 'ACTIVE' : 'OFFLINE'}
+              </span>
             </div>
-            <div style={{ height: '200px', background: '#000', position: 'relative', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ height: '200px', background: '#05070d', position: 'relative', overflow: 'hidden' }}>
               {activeSensors.lidar && (
-                <motion.div 
-                  animate={{ rotateY: 360 }}
-                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                  style={{ width: '100px', height: '100px', transformStyle: 'preserve-3d', position: 'relative' }}
-                >
-                  {/* Abstract point cloud representation */}
-                  <div style={{ position: 'absolute', inset: 0, border: '1px dashed rgba(0, 229, 255, 0.5)', borderRadius: '50%' }} />
-                  <div style={{ position: 'absolute', top: '20%', left: '20%', width: '40px', height: '40px', border: '1px solid var(--color-primary)', transform: 'translateZ(20px)' }} />
-                </motion.div>
+                <div className="bg-grid-pattern" style={{ width: '100%', height: '100%', opacity: 0.5 }}>
+                  {/* Fake point cloud clusters */}
+                  <div style={{ position: 'absolute', top: '30%', left: '20%', width: '50px', height: '50px', background: 'radial-gradient(circle, var(--color-primary) 0%, transparent 70%)', filter: 'blur(2px)' }} />
+                  <div style={{ position: 'absolute', top: '40%', right: '30%', width: '80px', height: '40px', background: 'radial-gradient(circle, var(--color-primary) 0%, transparent 70%)', filter: 'blur(2px)' }} />
+                </div>
               )}
             </div>
           </div>
 
           {/* Radar Panel */}
-          <div className="glass-panel" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: activeSensors.radar ? 1 : 0.5, transition: 'opacity 0.3s' }}>
-            <div style={{ padding: '1rem', borderBottom: 'var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Radio size={18} color="var(--color-primary)" />
-                <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>Radar Velocities</span>
+          <div className="surface-level-1" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: activeSensors.radar ? 1 : 0.5, transition: 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+            <div style={{ padding: 'var(--space-3)', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                <Radio size={20} color="var(--color-warning)" aria-hidden="true" />
+                <h3 className="text-h2" style={{ margin: 0 }}>Radar (Velocity)</h3>
               </div>
-              <input type="checkbox" checked={activeSensors.radar} onChange={() => toggleSensor('radar')} style={{ cursor: 'pointer' }} />
+              <span className="text-caption" style={{ color: activeSensors.radar ? '#00e676' : 'var(--color-text-muted)' }}>
+                {activeSensors.radar ? 'ACTIVE' : 'OFFLINE'}
+              </span>
             </div>
-            <div style={{ height: '200px', background: '#0a192f', position: 'relative', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              {/* Radar sweeps */}
-              <div style={{ position: 'absolute', width: '300px', height: '300px', borderRadius: '50%', border: '1px solid rgba(0,229,255,0.1)' }} />
-              <div style={{ position: 'absolute', width: '200px', height: '200px', borderRadius: '50%', border: '1px solid rgba(0,229,255,0.2)' }} />
-              <div style={{ position: 'absolute', width: '100px', height: '100px', borderRadius: '50%', border: '1px solid rgba(0,229,255,0.3)' }} />
+            <div style={{ height: '200px', background: '#05070d', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               {activeSensors.radar && (
                 <>
-                  <div style={{ position: 'absolute', top: '40%', left: '30%', width: '6px', height: '6px', background: 'var(--color-warning)', borderRadius: '50%' }}>
-                    {/* Velocity vector line */}
-                    <div style={{ position: 'absolute', top: '3px', left: '3px', width: '30px', height: '2px', background: 'var(--color-warning)', transformOrigin: 'left center', transform: 'rotate(-45deg)' }} />
-                  </div>
+                  <div style={{ position: 'absolute', bottom: 0, left: '50%', width: '2px', height: '100%', background: 'rgba(255,255,255,0.1)' }} />
+                  {/* Doppler vectors */}
+                  <motion.div animate={{ y: [-10, 10, -10] }} transition={{ duration: 2, repeat: Infinity }} style={{ position: 'absolute', top: '40%', left: '25%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ width: '4px', height: '30px', background: 'var(--color-warning)' }} />
+                    <span className="text-caption" style={{ color: 'var(--color-warning)', marginTop: '4px' }}>-12 m/s</span>
+                  </motion.div>
+                  <motion.div animate={{ y: [10, -10, 10] }} transition={{ duration: 3, repeat: Infinity }} style={{ position: 'absolute', top: '50%', right: '35%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ width: '4px', height: '45px', background: '#00e676' }} />
+                    <span className="text-caption" style={{ color: '#00e676', marginTop: '4px' }}>+18 m/s</span>
+                  </motion.div>
                 </>
               )}
             </div>
           </div>
-          
         </div>
 
-        {/* Converging Data Streams */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '30%', height: '50px', position: 'relative', marginBottom: '2rem' }}>
-           <motion.div style={{ width: '2px', height: '100%', background: 'linear-gradient(180deg, var(--color-primary) 0%, transparent 100%)' }} animate={{ opacity: activeSensors.camera ? [0.2, 1, 0.2] : 0.1 }} transition={{ repeat: Infinity, duration: 1 }} />
-           <motion.div style={{ width: '2px', height: '100%', background: 'linear-gradient(180deg, var(--color-primary) 0%, transparent 100%)' }} animate={{ opacity: activeSensors.lidar ? [0.2, 1, 0.2] : 0.1 }} transition={{ repeat: Infinity, duration: 1.2 }} />
-           <motion.div style={{ width: '2px', height: '100%', background: 'linear-gradient(180deg, var(--color-primary) 0%, transparent 100%)' }} animate={{ opacity: activeSensors.radar ? [0.2, 1, 0.2] : 0.1 }} transition={{ repeat: Infinity, duration: 1.4 }} />
-        </div>
-
-        {/* Fused Output */}
-        <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-          <h3 style={{ margin: '0 0 1rem 0', color: 'var(--color-primary)' }}>Fused Occupancy Grid</h3>
-          
-          <div style={{ width: '100%', height: '300px', background: '#000', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div className="bg-grid-pattern" style={{ position: 'absolute', inset: 0, opacity: 0.5 }} />
-            
-            {/* Ego Vehicle Center */}
-            <div style={{ position: 'absolute', width: '20px', height: '40px', background: 'var(--color-primary)', borderRadius: '4px', boxShadow: '0 0 20px var(--color-primary)' }} />
-            
-            {/* Fused Detections based on active sensors */}
-            <AnimatePresence>
-              {(activeSensors.camera || activeSensors.lidar || activeSensors.radar) && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  style={{ position: 'absolute', top: '20%', left: '30%', width: '40px', height: '30px', background: 'rgba(255, 171, 0, 0.3)', border: '2px solid var(--color-warning)' }}
-                >
-                  <div style={{ color: 'var(--color-warning)', fontSize: '0.6rem', position: 'absolute', top: '-15px', whiteSpace: 'nowrap' }}>
-                    CONF: {activeSensors.camera && activeSensors.lidar && activeSensors.radar ? '98%' : activeSensors.camera && activeSensors.lidar ? '85%' : '60%'}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+        {/* Interactive Controls */}
+        <div className="surface-level-1" style={{ padding: 'var(--space-4)', textAlign: 'center' }}>
+          <h3 className="text-h2" style={{ marginBlockEnd: 'var(--space-2)' }}>Fault Injection Testing</h3>
+          <p className="text-body" style={{ color: 'var(--color-text-muted)', marginBlockEnd: 'var(--space-3)' }}>
+            Toggle sensors to simulate hardware failures. The fusion engine continues to operate on degraded inputs.
+          </p>
+          <div className="flex-center" style={{ gap: 'var(--space-2)', flexWrap: 'wrap' }}>
+            <Button variant={activeSensors.camera ? 'primary' : 'outline'} onClick={() => toggleSensor('camera')}>Toggle Camera</Button>
+            <Button variant={activeSensors.lidar ? 'primary' : 'outline'} onClick={() => toggleSensor('lidar')}>Toggle LiDAR</Button>
+            <Button variant={activeSensors.radar ? 'primary' : 'outline'} onClick={() => toggleSensor('radar')}>Toggle Radar</Button>
           </div>
         </div>
 

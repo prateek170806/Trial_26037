@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Home, RouteOff, BrainCircuit, Crosshair, Database, Compass, Navigation, Wrench, BarChart2, Users, PlaySquare } from 'lucide-react';
 
@@ -17,6 +17,8 @@ const menuItems = [
 ];
 
 const NavigationMenu = ({ isOpen, onClose, onSelect }) => {
+  const closeBtnRef = useRef(null);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isOpen) {
@@ -27,6 +29,13 @@ const NavigationMenu = ({ isOpen, onClose, onSelect }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  // Focus trap could be added here, but at minimum focus the close button on open
+  useEffect(() => {
+    if (isOpen && closeBtnRef.current) {
+      setTimeout(() => closeBtnRef.current.focus(), 100);
+    }
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -34,57 +43,43 @@ const NavigationMenu = ({ isOpen, onClose, onSelect }) => {
           initial={{ opacity: 0, x: '100%' }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: '100%' }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="menu-overlay"
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="menu-overlay surface-level-2"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site Navigation"
         >
           <button
-            className="menu-close-btn touch-target"
+            ref={closeBtnRef}
+            className="menu-close-btn btn btn-outline touch-target"
             onClick={onClose}
-            style={{
-              position: 'absolute',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              color: 'var(--color-text-main)',
-              zIndex: 10000,
-            }}
+            aria-label="Close menu"
+            style={{ position: 'absolute', padding: 0, border: 'none' }}
           >
-            <X size={32} />
+            <X size={32} aria-hidden="true" />
           </button>
 
-          <div className="menu-grid" style={{ width: '100%', maxWidth: '1000px', padding: '2rem 1rem' }}>
+          <nav className="menu-grid" style={{ width: '100%', maxWidth: '1000px', paddingBlock: 'var(--space-4)', paddingInline: 'var(--space-2)' }} aria-label="Main navigation">
             {menuItems.map((item, index) => (
               <motion.button
                 key={item.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.1)', boxShadow: `0 0 20px ${item.color}40` }}
-                whileTap={{ scale: 0.98, backgroundColor: 'rgba(255,255,255,0.15)' }}
-                onClick={() => {
-                  onSelect(item.id);
-                }}
-                className="menu-item-btn touch-target"
+                transition={{ delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                onClick={() => onSelect(item.id)}
+                className="menu-item-btn btn touch-target surface-level-1"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1.2rem',
+                  justifyContent: 'flex-start',
+                  gap: 'var(--space-2)',
                   width: '100%',
-                  background: 'rgba(255,255,255,0.05)',
-                  border: `1px solid rgba(255,255,255,0.1)`,
-                  borderRadius: '12px',
-                  cursor: 'pointer',
-                  textAlign: 'left',
                   color: 'white',
-                  fontFamily: 'var(--font-heading)',
-                  transition: 'all 0.2s ease',
                 }}
               >
-                <item.icon size={24} color={item.color} />
-                <span className="text-menu">{item.label}</span>
+                <item.icon size={24} color={item.color} aria-hidden="true" />
+                <span className="text-h2">{item.label}</span>
               </motion.button>
             ))}
-          </div>
+          </nav>
         </motion.div>
       )}
     </AnimatePresence>

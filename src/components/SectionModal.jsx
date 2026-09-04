@@ -3,15 +3,25 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowLeft } from 'lucide-react';
 
 const SectionModal = ({ isOpen, onClose, onBackToMenu, children }) => {
+  
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isOpen) {
-        onBackToMenu();
+        onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onBackToMenu]);
+  }, [isOpen, onClose]);
+
+  // Lock body scroll when any modal is open (handled globally by 100dvh, but good practice if modal has its own scroll)
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'hidden'; // Keep zero-scroll global logic
+    }
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -20,62 +30,32 @@ const SectionModal = ({ isOpen, onClose, onBackToMenu, children }) => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="full-screen-modal"
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="full-screen-modal surface-level-2"
+          role="dialog"
+          aria-modal="true"
         >
-          {/* Header Actions */}
-          <div style={{
-            position: 'sticky',
-            top: 0,
-            left: 0,
-            right: 0,
-            padding: '1rem 2rem',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            background: 'linear-gradient(180deg, rgba(5,7,13,0.9) 0%, transparent 100%)',
-            zIndex: 10001,
-            pointerEvents: 'none' // Let clicks pass through except on buttons
-          }}>
+          {/* Sticky Header */}
+          <header className="modal-header-sticky">
             <button
-              className="touch-target"
+              className="btn btn-outline touch-target"
               onClick={onBackToMenu}
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                borderRadius: '20px',
-                padding: '0.5rem 1rem',
-                color: 'white',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                pointerEvents: 'auto',
-                transition: 'background 0.2s'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+              aria-label="Back to menu"
+              style={{ padding: '0.5rem', border: 'none' }}
             >
-              <ArrowLeft size={16} /> Back to Menu
+              <ArrowLeft size={24} aria-hidden="true" />
+              <span className="text-body" style={{ fontWeight: 600, display: 'none' }}>Menu</span>
             </button>
             
             <button
-              className="touch-target"
+              className="btn btn-outline touch-target"
               onClick={onClose}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                color: 'var(--color-text-muted)',
-                pointerEvents: 'auto',
-                transition: 'color 0.2s'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
+              aria-label="Close modal"
+              style={{ padding: '0.5rem', border: 'none' }}
             >
-              <X size={32} />
+              <X size={24} aria-hidden="true" />
             </button>
-          </div>
+          </header>
 
           {/* Scrollable Content Container */}
           <div className="modal-content-wrapper">
