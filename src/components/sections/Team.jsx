@@ -2,12 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const teamMembers = [
-  { id: 1, name: "Prateek", role: "Team Lead", color: "var(--color-primary)" },
-  { id: 2, name: "Sakshi", role: "AI Engineer", color: "var(--color-accent)" },
-  { id: 3, name: "Parikshit", role: "Systems Eng.", color: "var(--color-warning)" },
-  { id: 4, name: "Maanas", role: "Simulation", color: "#00e676" },
-  { id: 5, name: "Arpit", role: "Hardware Int.", color: "#ff5722" },
-  { id: 6, name: "Shresth", role: "UI/UX & Data", color: "#e91e63" }
+  { id: 1, name: "Prateek", role: "Team Lead", focus: "System Architecture & Integration", color: "var(--color-primary)" },
+  { id: 2, name: "Swasteek", role: "Backend Eng.", focus: "Pipeline, Control Logic & Stateflow", color: "var(--color-accent)" },
+  { id: 3, name: "Ayush", role: "Model Trainer", focus: "Trajectory Prediction & Sensor Fusion (DL)", color: "var(--color-warning)" },
+  { id: 4, name: "Rituraj", role: "Simulation Eng.", focus: "RoadRunner Scenarios & Vehicle Dynamics", color: "#00e676" },
+  { id: 5, name: "Purva", role: "UI/UX Designer", focus: "HUD Interface, Visual Hierarchy & Dashboard", color: "#ff5722" },
+  { id: 6, name: "Shambhavi", role: "Debug Eng.", focus: "Closed-Loop Validation & Fault Analysis", color: "#e91e63" }
 ];
 
 const Team = () => {
@@ -35,7 +35,8 @@ const Team = () => {
               </div>
               <div>
                 <h3 className="text-h2" style={{ margin: 0, marginBlockEnd: '4px' }}>{member.name}</h3>
-                <p className="text-caption" style={{ color: member.color, margin: 0 }}>{member.role}</p>
+                <p className="text-caption" style={{ color: member.color, margin: 0, marginBlockEnd: '4px' }}>{member.role}</p>
+                <p className="text-body" style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem', margin: 0 }}>{member.focus}</p>
               </div>
             </motion.div>
           ))}
