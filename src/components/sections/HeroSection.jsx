@@ -2,128 +2,107 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Button from '../ui/Button';
 import Metric from '../ui/Metric';
-import { ArrowRight, Activity, Crosshair } from 'lucide-react';
+import { ArrowRight, Crosshair } from 'lucide-react';
+import { useDevice } from '../../hooks/useDevice';
 
-const HeroSection = () => {
+const HeroSection = ({ onExploreClick }) => {
+  const { isLowEnd } = useDevice();
   const [typedText, setTypedText] = useState('');
   const fullText = "NavDrishti";
 
   useEffect(() => {
-    let currentText = '';
     let i = 0;
     const interval = setInterval(() => {
-      if (i < fullText.length) {
-        currentText += fullText.charAt(i);
-        setTypedText(currentText);
-        i++;
-      } else {
-        clearInterval(interval);
-      }
+      setTypedText(fullText.substring(0, i + 1));
+      i++;
+      if (i > fullText.length) clearInterval(interval);
     }, 100);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <section className="section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: '8rem' }}>
-      {/* Background with Grid and glowing gradients handled by index.css */}
+    <section style={{ height: '100dvh', width: '100vw', position: 'relative', overflow: 'hidden' }}>
       
-      <div className="container" style={{ position: 'relative', zIndex: 10 }}>
-        <div style={{ maxWidth: '800px' }}>
+      {/* 3D/Lidar particle background - disabled on low-end devices */}
+      {!isLowEnd && (
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.6, pointerEvents: 'none' }}>
+           <div className="bg-grid-pattern" style={{ width: '100%', height: '100%', position: 'absolute' }} />
+           {Array.from({ length: 30 }).map((_, i) => (
+             <motion.div
+               key={i}
+               style={{
+                 position: 'absolute',
+                 width: Math.random() * 4 + 1 + 'px',
+                 height: Math.random() * 4 + 1 + 'px',
+                 background: i % 3 === 0 ? 'var(--color-primary)' : 'var(--color-warning)',
+                 borderRadius: '50%',
+                 left: Math.random() * 100 + '%',
+                 top: Math.random() * 100 + '%',
+                 boxShadow: `0 0 10px ${i % 3 === 0 ? 'var(--color-primary)' : 'var(--color-warning)'}`
+               }}
+               animate={{
+                 y: [0, -100, 0],
+                 opacity: [0.2, 1, 0.2]
+               }}
+               transition={{
+                 duration: Math.random() * 5 + 5,
+                 repeat: Infinity,
+                 ease: "linear"
+               }}
+             />
+           ))}
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="container hero-content" style={{ position: 'relative', zIndex: 10, maxWidth: '1400px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '800px', width: '100%' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem', padding: '0.5rem 1rem', background: 'rgba(0, 229, 255, 0.1)', borderRadius: '20px', border: '1px solid rgba(0, 229, 255, 0.3)' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-primary)', boxShadow: '0 0 10px var(--color-primary)' }} className="animate-pulse-glow" />
-              <span style={{ fontSize: '0.875rem', color: 'var(--color-primary)', fontWeight: '600', letterSpacing: '0.05em' }}>SYSTEM ACTIVE</span>
+            <div style={{ display: 'inline-block', padding: '0.25rem 0.75rem', border: '1px solid var(--color-primary)', borderRadius: '20px', color: 'var(--color-primary)', fontSize: '0.8rem', marginBottom: '1.5rem', letterSpacing: '0.05em' }}>
+              SIH 2026 - AUTONOMOUS DRIVING
             </div>
             
-            <h1 style={{ fontSize: '5rem', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '700' }} className="glitch-effect">
-              {typedText}
+            <h1 className="title-fluid glitch-effect" style={{ marginBottom: '1rem', fontWeight: 700, lineHeight: 1.1 }}>
+              <span className="text-gradient">{typedText}</span>
               <motion.span 
-                animate={{ opacity: [1, 0, 1] }} 
+                animate={{ opacity: [1, 0] }}
                 transition={{ repeat: Infinity, duration: 0.8 }}
-                style={{ color: 'var(--color-primary)' }}
-              >_</motion.span>
+                style={{ display: 'inline-block', width: '4px', height: '1em', background: 'var(--color-primary)', marginLeft: '0.2rem', verticalAlign: 'middle' }}
+              />
             </h1>
             
             <motion.p 
+              className="tagline-fluid"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.5, duration: 1 }}
-              style={{ fontSize: '1.5rem', color: 'var(--color-text-muted)', marginBottom: '3rem', maxWidth: '600px' }}
+              transition={{ delay: 1, duration: 0.8 }}
+              style={{ color: 'var(--color-text-muted)', marginBottom: '2.5rem', maxWidth: '600px', margin: '0 auto 2.5rem auto' }}
             >
-              Seeing Through Chaos. <span className="text-gradient">Navigating the Unpredictable.</span>
+              Adaptive Path Planning & Collision Avoidance for Autonomous Vehicles on Unstructured Indian Roads.
             </motion.p>
             
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <Button icon={ArrowRight}>Explore System</Button>
-              <Button variant="outline" icon={Activity}>View Live Demo</Button>
+            <div className="flex-center" style={{ gap: '1rem', flexWrap: 'wrap' }}>
+              <Button icon={ArrowRight} onClick={onExploreClick} className="touch-target">Explore System</Button>
             </div>
           </motion.div>
         </div>
 
-        {/* HUD Overlay */}
+        {/* Floating HUD Metrics */}
         <motion.div 
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="glass-panel"
-          style={{ 
-            position: 'absolute', 
-            right: '2rem', 
-            top: '50%', 
-            transform: 'translateY(-50%)',
-            padding: '2rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '2rem',
-            minWidth: '250px'
-          }}
+          className="hero-metrics-container"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem' }}>
-            <Crosshair size={20} color="var(--color-primary)" />
-            <h3 style={{ fontSize: '1rem', margin: 0 }}>LIVE TELEMETRY</h3>
-          </div>
-          <Metric label="Replanning Latency" value="47" unit="ms" status="good" />
-          <Metric label="Collision Risk" value="LOW" status="good" />
-          <Metric label="Agents Tracked" value="23" />
-          <Metric label="Path Smoothness" value="0.94" status="normal" />
+          <Metric label="Replanning Latency" value="12ms" trend="-2ms" status="good" />
+          <Metric label="Collision Risk" value="0.04%" trend="-0.01%" status="good" />
+          <Metric label="Agents Tracked" value="128" icon={Crosshair} />
+          <Metric label="Path Smoothness" value="98.5%" status="good" />
         </motion.div>
-      </div>
-
-      {/* Abstract Animated Visualization Background */}
-      <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: '50%', zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-        {/* Placeholder for 3D bird's eye view. Since we are using Vanilla CSS/React, we will use stylized SVG animations here to represent paths */}
-        <svg width="100%" height="100%" viewBox="0 0 800 800" style={{ opacity: 0.6 }}>
-           <motion.path 
-             d="M 100,800 C 150,600 300,500 400,400 C 500,300 700,200 800,100" 
-             fill="none" 
-             stroke="var(--color-primary)" 
-             strokeWidth="4"
-             strokeDasharray="10 10"
-             initial={{ pathLength: 0, opacity: 0 }}
-             animate={{ pathLength: 1, opacity: 1 }}
-             transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-             style={{ filter: 'drop-shadow(0 0 8px rgba(0,229,255,0.8))' }}
-           />
-           {/* Animated agents */}
-           <motion.circle r="6" fill="var(--color-warning)" filter="drop-shadow(0 0 5px var(--color-warning))"
-             animate={{
-               cx: [200, 300, 400, 500],
-               cy: [600, 500, 450, 400]
-             }}
-             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-           />
-           <motion.circle r="4" fill="#ff5722" filter="drop-shadow(0 0 5px #ff5722)"
-             animate={{
-               cx: [600, 500, 450],
-               cy: [700, 600, 500]
-             }}
-             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-           />
-        </svg>
       </div>
     </section>
   );

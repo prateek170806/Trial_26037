@@ -57,13 +57,14 @@ const ScenarioShowcase = () => {
           <p style={{ color: 'var(--color-text-muted)' }}>5 Critical Scenarios Validating the Architecture.</p>
         </div>
 
-        <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+        <div className="scenario-layout">
           {/* Tabs */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: '1', minWidth: '300px' }}>
+          <div className="scenario-tabs">
             {scenarios.map((scenario) => (
               <div 
                 key={scenario.id}
                 onClick={() => setActiveTab(scenario)}
+                className="touch-target"
                 style={{
                   padding: '1.25rem',
                   borderRadius: '12px',
@@ -84,24 +85,24 @@ const ScenarioShowcase = () => {
           </div>
 
           {/* Visualization Area */}
-          <div className="glass-panel" style={{ flex: '2', minWidth: '400px', display: 'flex', flexDirection: 'column' }}>
+          <div className="glass-panel scenario-vis" style={{ display: 'flex', flexDirection: 'column' }}>
             {/* Top Bar Metrics */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1.5rem', borderBottom: 'var(--glass-border)' }}>
-              <div style={{ display: 'flex', gap: '2rem' }}>
+            <div className="scenario-metrics-bar" style={{ display: 'flex', justifyContent: 'space-between', padding: '1.5rem', borderBottom: 'var(--glass-border)' }}>
+              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
                 <div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>COMPLETION TIME</div>
-                  <div className="font-mono" style={{ fontSize: '1.5rem', color: 'white' }}>{activeTab.metrics.time}</div>
+                  <div className="font-mono metric-num-fluid" style={{ color: 'white' }}>{activeTab.metrics.time}</div>
                 </div>
                 <div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>REPLANNING EVENTS</div>
-                  <div className="font-mono" style={{ fontSize: '1.5rem', color: 'var(--color-warning)' }}>{activeTab.metrics.replans}</div>
+                  <div className="font-mono metric-num-fluid" style={{ color: 'var(--color-warning)' }}>{activeTab.metrics.replans}</div>
                 </div>
                 <div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>MIN CLEARANCE</div>
-                  <div className="font-mono" style={{ fontSize: '1.5rem', color: 'var(--color-primary)' }}>{activeTab.metrics.clearance}</div>
+                  <div className="font-mono metric-num-fluid" style={{ color: 'var(--color-primary)' }}>{activeTab.metrics.clearance}</div>
                 </div>
               </div>
-              <Button icon={Play} variant="primary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>Run Sim</Button>
+              <Button icon={Play} variant="primary" className="touch-target" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>Run Sim</Button>
             </div>
 
             {/* Animation Canvas Placeholder */}
@@ -115,8 +116,8 @@ const ScenarioShowcase = () => {
                    transition={{ duration: 0.5 }}
                    style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
                  >
-                   <div style={{ textAlign: 'center' }}>
-                     <p style={{ color: 'var(--color-text-muted)', maxWidth: '400px', margin: '0 auto 2rem auto' }}>{activeTab.desc}</p>
+                   <div style={{ textAlign: 'center', width: '100%' }}>
+                     <p className="body-fluid" style={{ color: 'var(--color-text-muted)', maxWidth: '400px', margin: '0 auto 2rem auto' }}>{activeTab.desc}</p>
                      
                      {/* Simplified visual representation of the simulation */}
                      <div style={{ width: '100%', height: '200px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px dashed rgba(255,255,255,0.1)', position: 'relative', overflow: 'hidden' }}>

@@ -20,7 +20,7 @@ const Team = () => {
         </div>
 
         {/* Honeycomb Grid Layout */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem', maxWidth: '900px', margin: '0 auto' }}>
+        <div className="team-grid">
           {teamMembers.map((member, index) => (
             <motion.div
               key={index}
@@ -29,31 +29,19 @@ const Team = () => {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -10, boxShadow: '0 10px 30px rgba(124, 77, 255, 0.3)' }}
-              style={{
-                width: '250px',
-                height: '280px',
-                clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-                background: 'rgba(255,255,255,0.03)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '2rem',
-                border: '1px solid rgba(124,77,255,0.2)',
-                position: 'relative',
-                cursor: 'pointer',
-                transition: 'all 0.3s'
-              }}
+              className="team-member-card"
             >
-              <div style={{ position: 'absolute', inset: '2px', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', background: 'var(--color-bg-base)', zIndex: -1 }} />
+              <div className="team-member-bg" />
               
               {/* Avatar Placeholder */}
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(45deg, var(--color-primary), var(--color-accent))', marginBottom: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white', fontWeight: 'bold', fontSize: '1.5rem' }}>
+              <div className="team-avatar">
                 {member.name.charAt(0)}
               </div>
               
-              <h4 style={{ margin: '0 0 0.5rem 0', textAlign: 'center', color: 'white' }}>{member.name}</h4>
-              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', textAlign: 'center' }}>{member.role}</span>
+              <div>
+                <h4 style={{ margin: '0 0 0.25rem 0', color: 'white' }}>{member.name}</h4>
+                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{member.role}</span>
+              </div>
             </motion.div>
           ))}
         </div>

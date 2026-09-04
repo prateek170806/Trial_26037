@@ -13,7 +13,7 @@ const MetricsDashboard = () => {
           <p style={{ color: 'var(--color-text-muted)' }}>Real-time telemetry and benchmark comparisons against baseline models.</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>
+        <div className="grid-3-col" style={{ marginBottom: '4rem' }}>
           
           <Card>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>

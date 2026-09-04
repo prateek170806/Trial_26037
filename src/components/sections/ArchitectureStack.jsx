@@ -22,10 +22,10 @@ const ArchitectureStack = () => {
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2rem 0' }}>
           
           {/* Vertical Pipeline */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', position: 'relative', width: '100%', maxWidth: '800px' }}>
+          <div className="arch-pipeline" style={{ position: 'relative' }}>
             
             {/* Animated background line connecting layers */}
-            <div style={{ position: 'absolute', left: '50%', top: '2rem', bottom: '2rem', width: '4px', background: 'rgba(255,255,255,0.05)', transform: 'translateX(-50%)', zIndex: 0 }}>
+            <div className="arch-line" style={{ position: 'absolute', left: '2rem', top: '2rem', bottom: '2rem', width: '2px', background: 'rgba(0, 229, 255, 0.2)', zIndex: 0 }}>
                <motion.div 
                  initial={{ height: 0 }}
                  whileInView={{ height: '100%' }}

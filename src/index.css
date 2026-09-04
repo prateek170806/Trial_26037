@@ -2,11 +2,11 @@
 
 :root {
   /* Colors */
-  --color-bg-base: #0a0e1a; /* Deep midnight navy */
+  --color-bg-base: #0a0e1a;
   --color-bg-panel: rgba(10, 14, 26, 0.6);
-  --color-primary: #00e5ff; /* Electric cyan */
-  --color-warning: #ffab00; /* Neon amber */
-  --color-accent: #7c4dff; /* Violet */
+  --color-primary: #00e5ff;
+  --color-warning: #ffab00;
+  --color-accent: #7c4dff;
   --color-text-main: #ffffff;
   --color-text-muted: rgba(255, 255, 255, 0.7);
   --color-text-dark: #05070d;
@@ -16,34 +16,78 @@
   --font-body: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
+  /* Fluid Typography */
+  --text-title: clamp(2rem, 6vw, 5rem);
+  --text-tagline: clamp(0.9rem, 2vw, 1.5rem);
+  --text-heading: clamp(1.4rem, 3.5vw, 2.8rem);
+  --text-body: clamp(0.85rem, 1.5vw, 1.1rem);
+  --text-metric-num: clamp(1rem, 2.5vw, 1.8rem);
+  --text-metric-label: clamp(0.6rem, 1vw, 0.85rem);
+  --text-menu: clamp(1.1rem, 2.5vw, 1.6rem);
+  --text-card-title: clamp(0.95rem, 1.8vw, 1.3rem);
+  --text-card-body: clamp(0.75rem, 1.2vw, 0.95rem);
+
   /* Other */
   --border-radius: 12px;
   --glass-border: 1px solid rgba(255, 255, 255, 0.1);
   --glass-border-highlight: 1px solid rgba(0, 229, 255, 0.3);
 }
 
-* {
+/* Global Responsive CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
+  overflow: hidden;
+  height: 100dvh;
+  width: 100vw;
   font-family: var(--font-body);
-  background-color: var(--color-bg-base);
+  background: var(--color-bg-base);
   color: var(--color-text-main);
-  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background-image: 
     radial-gradient(circle at 15% 50%, rgba(124, 77, 255, 0.05), transparent 25%),
     radial-gradient(circle at 85% 30%, rgba(0, 229, 255, 0.05), transparent 25%);
   background-attachment: fixed;
+  line-height: 1.4;
 }
 
-/* Typography */
+@media (min-width: 1025px) {
+  body {
+    line-height: 1.6;
+  }
+}
+
+img, video, canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Typography Classes mapping to clamp variables */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   letter-spacing: -0.02em;
 }
+
+.title-fluid { font-size: var(--text-title); }
+.tagline-fluid { font-size: var(--text-tagline); }
+.heading-fluid { font-size: var(--text-heading); }
+.body-fluid { font-size: var(--text-body); }
+.card-title-fluid { font-size: var(--text-card-title); }
+.card-body-fluid { font-size: var(--text-card-body); }
+.metric-num-fluid { font-size: var(--text-metric-num); }
+.metric-label-fluid { font-size: var(--text-metric-label); }
 
 .font-mono {
   font-family: var(--font-mono);
@@ -104,8 +148,10 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: translate(0) }
 }
 
-.glitch-effect:hover {
-  animation: glitch 0.2s cubic-bezier(.25, .46, .45, .94) both infinite;
+@media (hover: hover) and (pointer: fine) {
+  .glitch-effect:hover {
+    animation: glitch 0.2s cubic-bezier(.25, .46, .45, .94) both infinite;
+  }
 }
 
 @keyframes pulse-glow {
@@ -116,6 +162,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .animate-pulse-glow {
   animation: pulse-glow 2s infinite;
+}
+
+/* Reduced Motion for Low End Devices */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Lidar Grid Pattern */
@@ -133,11 +189,355 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 2rem;
 }
 
-/* Sections */
+/* Sections - now used inside modals */
 .section {
-  padding: 6rem 0;
+  padding: 4rem 0 6rem 0;
   position: relative;
+  min-height: 100%;
 }
 
-/* Cursor Trail Effect (implemented via JS, but needs CSS to hide default cursor maybe?) */
-/* Let's keep default cursor for now, or just a custom one */
+/* Modals & Overlays */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 26, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  /* Safe Area padding for notches */
+  padding-top: env(safe-area-inset-top, 20px);
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+
+.full-screen-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 13, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9998;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+  .nav-desktop {
+    display: flex !important;
+  }
+}
+
+/* --- RESPONSIVE LAYOUTS --- */
+
+/* Hero Section Layout */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+}
+
+.hero-metrics-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .hero-metrics-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    justify-content: flex-start;
+    padding-top: 15vh;
+  }
+  .hero-metrics-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: 2rem;
+  }
+}
+
+/* Modals & Padding */
+.modal-content-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 60px;
+}
+
+@media (max-width: 1024px) {
+  .modal-content-wrapper {
+    max-width: 90%;
+    padding: 30px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-content-wrapper {
+    max-width: 100%;
+    padding: 20px 16px;
+  }
+}
+
+/* Universal Grids (Problem, Scenarios, Metrics) */
+.grid-3-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.grid-2-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+
+@media (max-width: 1024px) {
+  .grid-3-col { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .grid-3-col { grid-template-columns: 1fr; gap: 1rem; }
+  .grid-2-col { grid-template-columns: 1fr; gap: 1rem; }
+}
+
+/* Architecture Pipeline */
+.arch-pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .arch-pipeline {
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .arch-pipeline > * {
+    min-width: 85vw;
+    scroll-snap-align: center;
+  }
+  .arch-line {
+    display: none;
+  }
+}
+
+/* Menu Overlay Layouts */
+.hamburger-btn {
+  top: 24px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+}
+@media (max-width: 1024px) {
+  .hamburger-btn {
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+  }
+}
+@media (max-width: 480px) {
+  .hamburger-btn {
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+
+.menu-item-btn {
+  padding: 1.25rem;
+}
+@media (max-width: 768px) {
+  .menu-item-btn {
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+}
+
+.menu-close-btn {
+  top: 24px;
+  right: 24px;
+}
+@media (max-width: 1024px) {
+  .menu-close-btn {
+    top: 16px;
+    right: 16px;
+  }
+}
+@media (max-width: 480px) {
+  .menu-close-btn {
+    top: 12px;
+    right: 12px;
+  }
+}
+
+/* Touch target sizing */
+@media (hover: none) and (pointer: coarse) {
+  button, a {
+    min-height: 48px;
+  }
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+/* Team Responsive Layout */
+.team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.team-member-card {
+  width: 250px;
+  height: 280px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: rgba(255,255,255,0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  border: 1px solid rgba(124,77,255,0.2);
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+}
+
+.team-member-bg {
+  position: absolute;
+  inset: 2px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: var(--color-bg-base);
+  z-index: -1;
+}
+
+.team-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, var(--color-primary), var(--color-accent));
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .team-member-card, .team-member-bg {
+    width: 100%;
+    height: auto;
+    clip-path: none;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+  .team-member-card {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 1rem;
+    text-align: left;
+  }
+  .team-avatar {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 0;
+    margin-right: 1rem;
+    font-size: 1.2rem;
+  }
+}
+
+/* Scenario Showcase Layout */
+.scenario-layout {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.scenario-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  min-width: 300px;
+}
+
+.scenario-vis {
+  flex: 2;
+  min-width: 400px;
+}
+
+@media (max-width: 1024px) {
+  .scenario-layout {
+    flex-direction: column;
+  }
+  .scenario-tabs {
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+  }
+  .scenario-tabs > div {
+    min-width: 250px;
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 768px) {
+  .scenario-tabs {
+    flex-direction: column;
+  }
+  .scenario-tabs > div {
+    min-width: 100%;
+  }
+  .scenario-vis {
+    min-width: 100%;
+  }
+  .scenario-metrics-bar {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

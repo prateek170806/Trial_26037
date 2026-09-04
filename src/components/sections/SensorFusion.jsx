@@ -17,8 +17,8 @@ const SensorFusion = () => {
           <p style={{ color: 'var(--color-text-muted)' }}>Multi-modal perception ensuring robustness even when individual sensors fail.</p>
         </div>
 
-        {/* Tri-panel display */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
+        {/* 3-Panel Sensor View */}
+        <div className="grid-3-col" style={{ width: '100%', marginBottom: '2rem' }}>
           
           {/* Camera Panel */}
           <div className="glass-panel" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: activeSensors.camera ? 1 : 0.5, transition: 'opacity 0.3s' }}>

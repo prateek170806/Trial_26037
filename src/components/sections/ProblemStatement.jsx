@@ -62,8 +62,8 @@ const ProblemStatement = () => {
           </motion.div>
         </div>
 
-        {/* 6 Challenge Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+        {/* Challenge Cards Grid */}
+        <div className="grid-3-col" style={{ position: 'relative', zIndex: 10 }}>
           {challenges.map((challenge, index) => (
             <Card key={challenge.id} delay={index * 0.1} className="challenge-card">
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
